@@ -1,9 +1,15 @@
-# homelab
+# MacBookHomelab
 
 Turning an early-2015 MacBook Air (Linux Mint) into a small, modular, secure
 home server. Every service is its own Docker Compose file, so any one can be
 removed without touching the others. Nothing is exposed to the internet; remote
 access is through Tailscale only.
+
+> **Status: stage 1 of 11 is written.** `stages/stage1-base.sh` exists and runs;
+> everything after it is the plan rather than shipped code. The design, the RAM
+> budgets and the ordering are worked out — the remaining scripts are not
+> written. Read this as a build plan with its first step implemented, not as a
+> finished system.
 
 ## The hardware this is designed around
 
