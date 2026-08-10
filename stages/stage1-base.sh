@@ -29,7 +29,9 @@ sudo apt-get -y install ufw unattended-upgrades lm-sensors curl ca-certificates
 echo ">>> 3/7  Firewall: block inbound by default, allow SSH and local DNS"
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
-sudo ufw allow OpenSSH
+# Port 22 opened by number: the OpenSSH ufw profile only exists once
+# openssh-server is installed, and that happens in stage 2.
+sudo ufw allow 22/tcp
 # DNS for AdGuard, restricted to the local network only (adjust if your LAN differs):
 sudo ufw allow from 192.168.0.0/16 to any port 53 proto udp
 sudo ufw allow from 192.168.0.0/16 to any port 53 proto tcp
