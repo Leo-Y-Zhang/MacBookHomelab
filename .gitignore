@@ -1,0 +1,6 @@
+# Never commit runtime secrets or per-host state.
+.env
+*.env
+*secret*
+*.key
+*.pem
