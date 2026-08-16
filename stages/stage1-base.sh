@@ -71,6 +71,6 @@ echo
 echo ">>> Stage 1 complete."
 echo "    Temperature now:"; sensors 2>/dev/null | grep -i -m1 'Core 0' || echo "    (run 'sudo sensors-detect --auto' once, then 'sensors')"
 echo "    Free memory + swap:"; free -h
-echo "    Test the lid: close it. The machine should stay awake (its fan/'"'"'power light stays on')."
+echo "    Test the lid: close it. The machine should stay awake (its fan/power light stays on)."
 echo "    To undo the lid change: set both HandleLidSwitch lines back to 'suspend' in"
 echo "    /etc/systemd/logind.conf and run: sudo systemctl restart systemd-logind"
