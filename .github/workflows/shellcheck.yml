@@ -1,0 +1,45 @@
+name: shellcheck
+
+# The stage scripts configure a firewall, swap and systemd on the operator's
+# only server, and they are meant to be run by someone who finds the terminal
+# hard. Nothing here was ever parsed automatically, and a stage script that did
+# not parse at all sat in this repository unnoticed. This job parses every stage
+# script and lints it, so that never happens quietly again.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: List the stage scripts
+        run: |
+          find stages -type f -name '*.sh' | sort > scripts.txt
+          if [ ! -s scripts.txt ]; then
+            echo "No scripts found under stages/."
+            echo "A gate that checked nothing must not report success."
+            exit 1
+          fi
+          cat scripts.txt
+
+      - name: Parse every stage script
+        run: |
+          while read -r f; do
+            head -n 1 "$f" | grep -qx '#!/bin/sh' \
+              || { echo "$f: expected a '#!/bin/sh' shebang, so 'sh -n' is the right parser"; exit 1; }
+            echo "sh -n $f"
+            sh -n "$f"
+          done < scripts.txt
+
+      - name: shellcheck
+        run: |
+          shellcheck --version
+          xargs -r -a scripts.txt shellcheck
