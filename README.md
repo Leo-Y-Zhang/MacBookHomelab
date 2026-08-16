@@ -5,11 +5,13 @@ home server. Every service is its own Docker Compose file, so any one can be
 removed without touching the others. Nothing is exposed to the internet; remote
 access is through Tailscale only.
 
-> **Status: stage 1 of 11 is written.** `stages/stage1-base.sh` exists and runs;
-> everything after it is the plan rather than shipped code. The design, the RAM
-> budgets and the ordering are worked out — the remaining scripts are not
-> written. Read this as a build plan with its first step implemented, not as a
-> finished system.
+> **Status: the server is built and running. This repository is behind it.**
+> The machine was set up from this design, but the later stages were written and
+> run on the machine itself and never committed back, so `stages/` here still
+> holds only stage 1. **The running machine is the source of truth; this
+> repository is the plan it was built from, not an inventory of what is
+> installed.** Bringing the two back into step needs a session on the machine —
+> nothing else can report what is actually there without guessing.
 
 ## The hardware this is designed around
 
