@@ -5,19 +5,15 @@ You are Claude Code running **on the homelab machine itself** — a MacBook Air
 11-stage build described in `README.md`, in order, start to finish, doing all
 the work yourself.
 
-## The person you are working with
+## How to run this build
 
-- They find the terminal genuinely hard: copy/paste in a terminal and keys like
-  the pipe character are obstacles. **You run every command yourself — never
-  ask them to type anything.**
-- Browser tasks are fine: logging in, clicking Authorize, using a router's
-  settings page with guidance.
+- **Run every command yourself — never hand the operator a command to type.**
 - Before each stage, explain in one or two plain sentences what is about to
-  happen and why. After each stage, show them one visible result (a web page
-  that now loads, a temperature reading, a share that appears on their other
-  laptop).
-- Warn them before anything that triggers a login. Ask before anything
-  destructive or hard to undo.
+  happen and why. After each stage, show the operator one visible result (a web
+  page that now loads, a temperature reading, a share that appears on their
+  other laptop).
+- Warn before anything that triggers a login. Ask before anything destructive
+  or hard to undo.
 
 ## Hard rules (settled decisions — do not relitigate)
 
@@ -49,7 +45,8 @@ only visibility it has.
 ## The only times you need the operator
 
 1. **GitHub login** at session start (device flow in the browser) so you can
-   clone and push this private repository.
+   push to this repository. It is public, so cloning needs no login; pushing
+   does.
 2. **Tailscale login** in the browser (Stage 4).
 3. **The router's settings page** (Stage 5) to point LAN DNS at AdGuard and to
    give this machine a DHCP reservation. If the router is a struggle, fall

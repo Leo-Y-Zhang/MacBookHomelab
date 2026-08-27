@@ -1,17 +1,49 @@
 # MacBookHomelab
 
 Turning an early-2015 MacBook Air (Linux Mint) into a small, modular, secure
-home server. Every service is its own Docker Compose file, so any one can be
-removed without touching the others. Nothing is exposed to the internet; remote
-access is through Tailscale only.
+home server. The design gives every service its own Docker Compose file, so any
+one can be removed without touching the others. Nothing is exposed to the
+internet; remote access is through Tailscale only.
 
 > **Status: the server is built and running. This repository is behind it.**
 > The machine was set up from this design, but the later stages were written and
-> run on the machine itself and never committed back, so `stages/` here still
-> holds only stage 1. **The running machine is the source of truth; this
-> repository is the plan it was built from, not an inventory of what is
-> installed.** Bringing the two back into step needs a session on the machine —
-> nothing else can report what is actually there without guessing.
+> run on the machine itself and never committed back, so `stages/` here holds
+> only stage 1 and none of the Compose files described below are in this
+> repository. **The running machine is the source of truth; this repository is
+> the plan it was built from, not an inventory of what is installed.** Bringing
+> the two back into step needs a session on the machine — nothing else can
+> report what is actually there without guessing.
+
+## Running and checking this repository
+
+There is nothing to install and no application to start. This repository holds
+the build plan and the stage scripts that carry it out. A stage script runs on
+the server itself, one at a time, in the order below:
+
+```sh
+sh stages/stage1-base.sh
+```
+
+Requirements for running a stage: a Debian-family Linux with `apt-get`, and a
+user who can `sudo`. No language runtime and no build tooling are involved —
+the scripts are plain POSIX shell.
+
+Away from the server, what a checkout can be checked for is what CI checks
+(`.github/workflows/shellcheck.yml`): every stage script must declare a
+`#!/bin/sh` shebang, parse under `sh -n`, and come back clean from shellcheck.
+The last two of those are one command on any machine with a POSIX shell:
+
+```sh
+sh -c 'for f in stages/*.sh; do echo "sh -n $f"; sh -n "$f" || exit 1; done' && shellcheck stages/*.sh
+```
+
+`sh -n` parses without executing, so this is safe to run on a laptop. It takes
+one file at a time, which is why this loops: `sh -n stages/*.sh` would parse
+only the first script and silently pass over the rest. shellcheck is not in a
+base install (`sudo apt-get install shellcheck`, or `brew install shellcheck`);
+it is preinstalled on the GitHub runner CI uses. Dropping it still leaves the
+parse loop, which is the check that catches the fault this repository has
+actually had — an unterminated quote that stopped stage 1 parsing at all.
 
 ## The hardware this is designed around
 
