@@ -1,10 +1,9 @@
 name: shellcheck
 
 # The stage scripts configure a firewall, swap and systemd on the operator's
-# only server, and they are meant to be run by someone who finds the terminal
-# hard. Nothing here was ever parsed automatically, and a stage script that did
-# not parse at all sat in this repository unnoticed. This job parses every stage
-# script and lints it, so that never happens quietly again.
+# only server. Nothing here was ever parsed automatically, and a stage script
+# that did not parse at all sat in this repository unnoticed. This job parses
+# every stage script and lints it, so that never happens quietly again.
 
 on:
   push:
@@ -19,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: List the stage scripts
         run: |
