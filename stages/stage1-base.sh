@@ -17,7 +17,14 @@
 # It asks for your password (sudo) because installing software and changing
 # system settings needs administrator rights. Run it with:  sh stage1-base.sh
 
-set -e
+set -eu
+
+# Run as yourself, not with sudo: each step asks for sudo where it needs it,
+# and the /srv folders below must end up owned by you rather than by root.
+if [ "$(id -u)" -eq 0 ]; then
+  echo "Run this stage as your own user, not with sudo or as root." >&2
+  exit 1
+fi
 
 echo ">>> 1/7  Refreshing package lists and installing security updates"
 sudo apt-get update
@@ -58,7 +65,12 @@ grep -q 'vm.swappiness' /etc/sysctl.conf || echo 'vm.swappiness=10' | sudo tee -
 
 echo ">>> 6/7  Creating the /srv folders for later stages"
 sudo mkdir -p /srv/appdata /srv/share /srv/media /srv/photos /srv/backups
-sudo chown -R "$USER":"$USER" /srv/appdata /srv/share /srv/media /srv/photos /srv/backups
+# The folders themselves, not what is in them: once later stages have run,
+# containers own their data under /srv (a database directory must stay owned
+# by the database's user), and running this stage again must not take it back.
+owner=$(id -un)
+group=$(id -gn)
+sudo chown "$owner:$group" /srv/appdata /srv/share /srv/media /srv/photos /srv/backups
 
 echo ">>> 7/7  Keeping the server running with the lid closed"
 sudo sed -i 's/^#\?HandleLidSwitch=.*/HandleLidSwitch=ignore/' /etc/systemd/logind.conf

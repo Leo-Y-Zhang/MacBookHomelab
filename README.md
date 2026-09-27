@@ -25,8 +25,10 @@ sh stages/stage1-base.sh
 ```
 
 Requirements for running a stage: a Debian-family Linux with `apt-get`, and a
-user who can `sudo`. No language runtime and no build tooling are involved —
-the scripts are plain POSIX shell.
+user who can `sudo`. Run it as that user, not with `sudo` in front: the script
+asks for `sudo` itself where it needs it, and stage 1 refuses to run as root
+because the `/srv` folders it creates must belong to you. No language runtime
+and no build tooling are involved — the scripts are plain POSIX shell.
 
 Away from the server, what a checkout can be checked for is what CI checks
 (`.github/workflows/shellcheck.yml`): every stage script must declare a
